@@ -3,7 +3,8 @@ import PanelDataGrid from "@/components/PanelDataGrid.vue";
 import { useEntityTypeStore } from "@/stores/entityTypeStore";
 import { computed } from "vue";
 import { SisoEnum } from "@siso-entity-type/lib";
-import { storeToRefs } from "pinia";
+import { storeToRefs , type Store} from "pinia";
+import EntityTypeForm from "@/components/EntityTypeForm.vue";
 
 const { sisoEnums } = storeToRefs(useEntityTypeStore());
 
@@ -18,14 +19,14 @@ const sisoEntityType = computed(() =>
 const entityTypeFields = computed(() => {
   if (!sisoEntityType.value) return [];
   return [
-    { label: "Kind", value: sisoEnums.value.getKindName(sisoEntityType.value) },
-    { label: "Domain", value: sisoEnums.value.getDomainName(sisoEntityType.value) },
-    { label: "Country", value: sisoEnums.value.getCountryName(sisoEntityType.value) },
-    { label: "Category", value: sisoEnums.value.getCategoryName(sisoEntityType.value) },
-    { label: "Subcategory", value: sisoEnums.value.getSubcategoryName(sisoEntityType.value) },
-    { label: "Specific", value: sisoEnums.value.getSpecificName(sisoEntityType.value) },
-    { label: "Extra", value: sisoEnums.value.getExtraName(sisoEntityType.value) },
-  ];
+    { label: "Kind", value: sisoEnums.value.getKindName(sisoEntityType.value), int : sisoEntityType.value['kind'] },
+    { label: "Domain", value: sisoEnums.value.getDomainName(sisoEntityType.value), int : sisoEntityType.value['domain'] },
+    { label: "Country", value: sisoEnums.value.getCountryName(sisoEntityType.value), int : sisoEntityType.value['country'] },
+    { label: "Category", value: sisoEnums.value.getCategoryName(sisoEntityType.value), int : sisoEntityType.value['category'] },
+    { label: "Subcategory", value: sisoEnums.value.getSubcategoryName(sisoEntityType.value), int : sisoEntityType.value['subcategory'] },
+    { label: "Specific", value: sisoEnums.value.getSpecificName(sisoEntityType.value), int : sisoEntityType.value['specific'] },
+    { label: "Extra", value: sisoEnums.value.getExtraName(sisoEntityType.value), int : sisoEntityType.value['extra'] },
+  ] satisfies { label: FieldLabel; value: string ; int: number }[];
 });
 
 // Filter out subsequent fields that are the same as the previous, e.g. specific == extra
@@ -37,17 +38,88 @@ const uniqueEntityTypeFields = computed(() => {
       }
       return acc;
     },
-    [] as { label: string; value: string }[],
+    [] as { label: string; value: string; int : number }[],
   );
 });
+
+const store = useEntityTypeStore(); 
+const refs = storeToRefs(store);
+
+const enumMappings = {
+  Country: {
+    select: 'selectCountry',
+    selected: 'selectedCountry',
+    enum: 'countries',
+  },
+  Kind: {
+    select: 'selectKind',
+    selected: 'selectedKind',
+    enum: 'kinds',
+  },
+  Domain: {
+    select: 'selectDomain',
+    selected: 'selectedDomain',
+    enum: 'domains',
+  },
+  Category: {
+    select: 'selectCategory',
+    selected: 'selectedCategory',
+    enum: 'categories',
+  },
+  Subcategory: {
+    select: 'selectSubcategory',
+    selected: 'selectedSubcategory',
+    enum: 'subcategories',
+  },
+  Specific: {
+    select: 'selectSpecific',
+    selected: 'selectedSpecific',
+    enum: 'specifics',
+  },
+  Extra: {
+    select: 'selectExtra',
+    selected: 'selectedExtra',
+    enum: 'extras',
+  },
+} as const;
+
+type FieldLabel = keyof typeof enumMappings;
+type SelectKeys = typeof enumMappings[FieldLabel]["select"];
+type SelectedKeys = typeof enumMappings[FieldLabel]["selected"];
+type EnumKeys = typeof enumMappings[FieldLabel]["enum"];
+
+function getSelectEnum(label: FieldLabel): SelectKeys {
+  return enumMappings[label].select;
+}
+
+function getSelectedEnum(label: FieldLabel): SelectedKeys {
+  return enumMappings[label].selected;
+}
+
+function getEnum(label: FieldLabel): EnumKeys {
+  return enumMappings[label].enum;
+}
+
 </script>
+
 <template>
   <div v-if="sisoEntityType">
     <h4 class="text-sm font-bold mt-2">Entity type: {{ props.entityType || "Unknown" }}</h4>
     <PanelDataGrid class="mt-4" v-if="sisoEntityType">
+
+      <!-- Enumerations loop -->
       <template v-for="(field, index) in uniqueEntityTypeFields" :key="index">
-        <span class="font-semibold">{{ field.label }}</span>
-        <span>{{ field.value }}</span>
+        <span class="p-2">{{ field.label }}</span>
+        <!-- <span>{{ field.value }}</span>
+        <span>{{ field.int }}</span> -->
+        <EntityTypeForm 
+          v-if="field?.value" 
+          :store = "store"
+          :field-int = "field.int"
+          :enumerations = "refs[getEnum(field.label as FieldLabel)]"
+          :selected-enum = "refs[getSelectedEnum(field.label as FieldLabel)]"
+          :select-enum-method="store[getSelectEnum(field.label as FieldLabel)]"
+        ></EntityTypeForm>
       </template>
     </PanelDataGrid>
     <PanelDataGrid class="mt-4" v-else>
