@@ -1,6 +1,6 @@
 import type { InjectionKey } from "vue";
 import { inject } from "vue";
-import type { ForceSide } from "@orbat-mapper/msdllib";
+import { EquipmentItem, ForceSide, Unit } from "@orbat-mapper/msdllib";
 import type { Position } from "geojson";
 
 export function sortBy<T extends object, K extends keyof T>(arr: T[], key: K, ascending = true) {
@@ -94,4 +94,38 @@ export function formatDecimalDegrees(p?: Position, precision = 4) {
   return `${Math.abs(lat).toFixed(precision)}° ${lat >= 0 ? "N" : "S"} ${Math.abs(lon).toFixed(
     precision,
   )}° ${lon >= 0 ? "E" : "W"}`;
+}
+
+export function xmlToString(element: Element): string {
+  const serializer = new XMLSerializer();
+  return serializer.serializeToString(element);
+  // Note: The XMLSerializer will in some cases output XML namespaces for every element.
+  // It is possible to remove these namespaces with the regex below, but it may not always
+  // work if you try to parse the element again and try to add it to an existing XML DOM.
+  // return xmlString.replace(/ xmlns="[^"]*"/g, "").replace(/ xmlns:[a-z0-9_-]+="[^"]*"/gi, "");
+}
+
+export function parseFromString(xmlString: string): Element {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(xmlString, "text/xml");
+
+  return doc.documentElement;
+}
+
+export function isUnit(item: Unit | EquipmentItem | ForceSide): item is Unit {
+  return item instanceof Unit;
+}
+
+export function isEquipmentItem(item: Unit | EquipmentItem | ForceSide): item is EquipmentItem {
+  return item instanceof EquipmentItem;
+}
+
+export function isForceSide(item: Unit | EquipmentItem | ForceSide): item is ForceSide {
+  return item instanceof ForceSide;
+}
+
+export function isUnitOrEquipment(
+  item: Unit | EquipmentItem | ForceSide,
+): item is Unit | EquipmentItem {
+  return isUnit(item) || isEquipmentItem(item);
 }

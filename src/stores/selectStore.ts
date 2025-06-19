@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
 import { shallowRef } from "vue";
-import type { EquipmentItem, Unit } from "@orbat-mapper/msdllib";
+import type { EquipmentItem, ForceSide, Unit } from "@orbat-mapper/msdllib";
 
 export const useSelectStore = defineStore("selectStore", () => {
-  const activeItem = shallowRef<Unit | EquipmentItem | null>(null);
+  const activeItem = shallowRef<Unit | EquipmentItem | ForceSide | null>(null);
   function clearActiveItem() {
     activeItem.value = null;
   }

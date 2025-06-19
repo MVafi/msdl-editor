@@ -4,8 +4,9 @@ import { ref } from "vue";
 
 export const useUIStore = defineStore("uiStore", () => {
   const [showLeftPanel, toggleLeftPanel] = useToggle(true);
+  const hoverEnabled = ref(true);
 
-  return { showLeftPanel, toggleLeftPanel };
+  return { showLeftPanel, toggleLeftPanel, hoverEnabled };
 });
 
 export const useSideStore = defineStore("sideStore", () => {

@@ -5,6 +5,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
+  DropdownMenuShortcut,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -19,7 +20,7 @@ import { useScenarioActions } from "@/composables/scenarioActions.ts";
 
 const store = useLayerStore();
 const mapSettings = useMapSettingsStore();
-const { msdl } = useScenarioStore();
+const { msdl, undo, redo, canUndo, canRedo } = useScenarioStore();
 const { dispatchAction } = useScenarioActions();
 
 const dialogStore = useDialogStore();
@@ -49,6 +50,17 @@ const dialogStore = useDialogStore();
           <DropdownMenuSeparator />
           <DropdownMenuItem @click="dispatchAction('ExportKML')"
             >Export as KML/KMZ</DropdownMenuItem
+          >
+        </DropdownMenuSubContent>
+      </DropdownMenuSub>
+      <DropdownMenuSub>
+        <DropdownMenuSubTrigger>Edit</DropdownMenuSubTrigger>
+        <DropdownMenuSubContent class="w-48">
+          <DropdownMenuItem @select="undo()" :disabled="!canUndo">
+            Undo <DropdownMenuShortcut>Ctrl+Z</DropdownMenuShortcut></DropdownMenuItem
+          >
+          <DropdownMenuItem @select="redo()" :disabled="!canRedo"
+            >Redo <DropdownMenuShortcut>Ctrl+shift+Z</DropdownMenuShortcut></DropdownMenuItem
           >
         </DropdownMenuSubContent>
       </DropdownMenuSub>

@@ -9,6 +9,7 @@ import { useSelectStore } from "@/stores/selectStore.ts";
 import { useScenarioStore } from "@/stores/scanarioStore.ts";
 import MapContextMenu from "@/components/MapContextMenu.vue";
 import type { MapContextMenuEvent } from "@/components/types.ts";
+import { useUIStore } from "@/stores/uiStore.ts";
 
 const props = defineProps<{ mlMap: MlMap }>();
 const emit = defineEmits(["showContextMenu"]);
@@ -20,6 +21,7 @@ const mapEvent = ref<MapContextMenuEvent>();
 const store = useLayerStore();
 const mapSettings = useMapSettingsStore();
 const selectStore = useSelectStore();
+const uiStore = useUIStore();
 
 const sides = computed(() => {
   return sortBy(msdl.value?.sides ?? [], "name").filter((side) => side.rootUnits.length > 0);
@@ -39,10 +41,6 @@ watchEffect(() => {
   const source = props.mlMap.getSource("sides") as GeoJSONSource;
   if (!source) return;
   source.setData(featureCollection as never);
-  // try {
-  //   const center = centroid(featureCollection as never);
-  //   props.mlMap.flyTo({ center: center.geometry.coordinates as [number, number], zoom: 3 });
-  // } catch {}
 });
 
 watchEffect(() => {
@@ -116,10 +114,6 @@ function addSidesToMap(map: MlMap) {
     type: "geojson",
     data: featureCollection as never,
   });
-  try {
-    const center = centroid(featureCollection as never);
-    map.flyTo({ center: center.geometry.coordinates as [number, number], zoom: 3 });
-  } catch {}
 
   map.on("styleimagemissing", function (e) {
     const symb = new ms.Symbol(e.id, {
@@ -169,11 +163,13 @@ function addSidesToMap(map: MlMap) {
 
   // Change the cursor to a pointer when the mouse is over the places layer.
   map.on("mouseenter", "sides", () => {
+    if (!uiStore.hoverEnabled) return;
     map.getCanvas().style.cursor = "pointer";
   });
 
   // Change it back to a pointer when it leaves.
   map.on("mouseleave", "sides", () => {
+    if (!uiStore.hoverEnabled) return;
     map.getCanvas().style.cursor = "";
   });
 
@@ -207,6 +203,13 @@ function addSidesToMap(map: MlMap) {
   });
 
   setTextField();
+
+  setTimeout(() => {
+    try {
+      const center = centroid(featureCollection as never);
+      map.flyTo({ center: center.geometry.coordinates as [number, number], zoom: 3 });
+    } catch {}
+  }, 600);
 }
 
 addSidesToMap(props.mlMap);

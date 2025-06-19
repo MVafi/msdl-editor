@@ -18,7 +18,7 @@ import { inputEventFilter } from "@/utils.ts";
 import CommandPalette from "@/components/CommandPalette.vue";
 import EditAssociationsDialog from "@/components/EditAssociationsDialog.vue";
 
-const { loadScenario, msdl } = useScenarioStore();
+const { loadScenario, msdl, undo, redo } = useScenarioStore();
 
 const mlMap = shallowRef<maplibregl.Map>();
 const showSearch = ref(false);
@@ -86,6 +86,14 @@ async function onDrop(files: File[] | null) {
       @keydown.ctrl.k.prevent="showSearch = true"
       @keydown.meta.k.prevent="showSearch = true"
       @keyup.prevent.alt.k="showSearch = true"
+    />
+    <GlobalEvents
+      :filter="inputEventFilter"
+      @keydown.meta.z.exact="undo()"
+      @keyup.ctrl.z.exact="undo()"
+      @keydown.meta.shift.z="redo()"
+      @keyup.ctrl.shift.z="redo()"
+      @keyup.ctrl.y="redo()"
     />
     <CommandPalette v-model:open="showSearch" />
   </div>

@@ -48,7 +48,9 @@ function onSelect(item: any) {
       <span v-else class="h-6 w-6 mr-1" />
       <div class="flex items-center gap-1">
         <MilSymbol :sidc="item.value.sidc" :size="16" />
-        <span>{{ item.value.label }}</span>
+        <span :class="selectStore.activeItem === item.value ? 'font-bold' : ''">{{
+          item.value.label
+        }}</span>
       </div>
     </TreeItem>
   </TreeRoot>

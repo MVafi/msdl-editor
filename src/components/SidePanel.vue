@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { ChevronDown } from "lucide-vue-next";
+import { ChevronDown, TableOfContentsIcon as SelectIcon } from "lucide-vue-next";
 import { Switch } from "@/components/ui/switch";
 import { useLayerStore } from "@/stores/layerStore.ts";
 import ForceSideMenu from "@/components/ForceSideMenu.vue";
@@ -17,8 +17,10 @@ import { Button } from "@/components/ui/button";
 import { useScenarioStore } from "@/stores/scanarioStore.ts";
 import SidePanelDropdown from "@/components/SidePanelDropdown.vue";
 import { useSideStore } from "@/stores/uiStore.ts";
+import { useSelectStore } from "@/stores/selectStore.ts";
 
 const { msdl } = useScenarioStore();
+const selectStore = useSelectStore();
 
 const layerStore = useLayerStore();
 const sideStore = useSideStore();
@@ -59,13 +61,22 @@ const toggleSide = (id: string) => {
   </header>
   <Accordion type="multiple" class="mt-2">
     <AccordionItem v-for="side in sides" :key="side.objectHandle" :value="side.objectHandle">
-      <AccordionTrigger class="bg-card-foreground/5 py-1 rounded-none px-4"
+      <AccordionTrigger class="bg-card-foreground/5 py-1 rounded-none px-4 group"
         ><div class="flex items-center gap-2 h-9">
           <span class="font-medium">{{ side.name }}</span
           ><Badge v-if="side === msdl?.primarySide">Primary</Badge>
         </div>
         <template #icon>
           <div class="flex items-center gap-2">
+            <Button
+              class="opacity-0 group-hover:opacity-100"
+              type="button"
+              variant="ghost"
+              title="Show details"
+              size="icon"
+              @click.stop="selectStore.activeItem = side"
+              ><SelectIcon
+            /></Button>
             <Switch
               @click.stop
               :modelValue="layerStore.layers.has(side.objectHandle)"
