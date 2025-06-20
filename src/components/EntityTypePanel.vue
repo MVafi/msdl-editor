@@ -6,6 +6,21 @@ import { SisoEnum } from "@siso-entity-type/lib";
 import { storeToRefs , type Store} from "pinia";
 import EntityTypeForm from "@/components/EntityTypeForm.vue";
 
+import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Pencil } from "lucide-vue-next";
+
 const { sisoEnums } = storeToRefs(useEntityTypeStore());
 
 const props = defineProps<{
@@ -104,22 +119,65 @@ function getEnum(label: FieldLabel): EnumKeys {
 
 <template>
   <div v-if="sisoEntityType">
-    <h4 class="text-sm font-bold mt-2">Entity type: {{ props.entityType || "Unknown" }}</h4>
-    <PanelDataGrid class="mt-4" v-if="sisoEntityType">
+    
+    <h4 class="text-sm font-bold mt-2 flex items-center">
+      <span>Entity type: {{ entityType || "Unknown" }}</span>
 
-      <!-- Enumerations loop -->
+      <Dialog :modal="false">
+        <DialogTrigger as-child>
+          <Button variant="outline">
+            Edit Profile
+          </Button>
+        </DialogTrigger>
+        <DialogContent class="sm:max-w-[425px]" >
+          <DialogHeader>
+            <DialogTitle>Edit profile</DialogTitle>
+            <DialogDescription>
+              Make changes to your profile here. Click save when you're done.
+            </DialogDescription>
+          </DialogHeader>
+
+
+
+
+          <PanelDataGrid class="mt-4" v-if="sisoEntityType">
+
+            <!-- Enumerations loop -->
+            <template v-for="(field, index) in uniqueEntityTypeFields" :key="index">
+              <span class="p-2">{{ field.label }}</span>
+              
+              <EntityTypeForm 
+                v-if="field?.value" 
+                :store = "store"
+                :field-int = "field.int"
+                :enumerations = "refs[getEnum(field.label as FieldLabel)]"
+                :selected-enum = "refs[getSelectedEnum(field.label as FieldLabel)]" 
+                :set-enum="store[getSelectEnum(field.label as FieldLabel)]"
+              ></EntityTypeForm>
+            </template>
+
+          </PanelDataGrid>
+          <PanelDataGrid class="mt-4" v-else>
+            <span class="font-semibold">No entitytype provided</span>
+          </PanelDataGrid>
+
+
+
+
+          <DialogFooter>
+            <Button type="submit">
+              Save changes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+    </h4>
+
+    <PanelDataGrid class="mt-4" v-if="sisoEntityType">
       <template v-for="(field, index) in uniqueEntityTypeFields" :key="index">
-        <span class="p-2">{{ field.label }}</span>
-        <!-- <span>{{ field.value }}</span>
-        <span>{{ field.int }}</span> -->
-        <EntityTypeForm 
-          v-if="field?.value" 
-          :store = "store"
-          :field-int = "field.int"
-          :enumerations = "refs[getEnum(field.label as FieldLabel)]"
-          :selected-enum = "refs[getSelectedEnum(field.label as FieldLabel)]"
-          :select-enum-method="store[getSelectEnum(field.label as FieldLabel)]"
-        ></EntityTypeForm>
+        <span class="font-semibold">{{ field.label }}</span>
+        <span>{{ field.value }}</span>
       </template>
     </PanelDataGrid>
     <PanelDataGrid class="mt-4" v-else>
