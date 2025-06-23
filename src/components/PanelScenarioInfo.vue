@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { PencilIcon } from "lucide-vue-next";
-import { useScenarioStore } from "@/stores/scanarioStore.ts";
+import { useScenarioStore } from "@/stores/scenarioStore.ts";
 import { Button } from "@/components/ui/button";
 import { useDialogStore } from "@/stores/dialogStore.ts";
 import { Badge } from "@/components/ui/badge";

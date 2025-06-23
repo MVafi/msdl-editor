@@ -22,7 +22,7 @@ import type { Position } from "geojson";
 import type { MapContextMenuEvent } from "@/components/types.ts";
 import MilSymbol from "@/components/MilSymbol.vue";
 import { useSelectStore } from "@/stores/selectStore.ts";
-import { useScenarioStore } from "@/stores/scanarioStore.ts";
+import { useScenarioStore } from "@/stores/scenarioStore.ts";
 import { Badge } from "@/components/ui/badge";
 
 const props = defineProps<{ event?: MapContextMenuEvent }>();

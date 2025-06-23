@@ -6,7 +6,7 @@ import { useToggle } from "@vueuse/core";
 import { PencilIcon } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
 import ForceSideEditForm from "@/components/ForceSideEditForm.vue";
-import { useScenarioStore } from "@/stores/scanarioStore.ts";
+import { useScenarioStore } from "@/stores/scenarioStore.ts";
 import { computed } from "vue";
 
 const {

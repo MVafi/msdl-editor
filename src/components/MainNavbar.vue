@@ -4,7 +4,7 @@ import { MoonIcon, SunIcon } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
 import { useDark, useToggle } from "@vueuse/core";
 import { loadMSDLFromFile } from "@/lib/io.ts";
-import { useScenarioStore } from "@/stores/scanarioStore.ts";
+import { useScenarioStore } from "@/stores/scenarioStore.ts";
 import EditableLabel from "@/components/EditableLabel.vue";
 import { computed } from "vue";
 

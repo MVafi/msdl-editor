@@ -1,10 +1,18 @@
 import { computed, shallowRef, triggerRef } from "vue";
-import { MilitaryScenario, ScenarioId } from "@orbat-mapper/msdllib";
+import {
+  Holding,
+  MilitaryScenario,
+  ScenarioId,
+  type HoldingType,
+  type ForceSide,
+  type StandardIdentity,
+} from "@orbat-mapper/msdllib";
 import { useLayerStore } from "@/stores/layerStore.ts";
 import { useSelectStore } from "@/stores/selectStore.ts";
 import type { ScenarioIdType } from "@orbat-mapper/msdllib/dist/lib/scenarioid";
 import { parseFromString, xmlToString } from "@/utils.ts";
 import type { Position } from "geojson";
+import { useSideStore } from "@/stores/uiStore.ts";
 
 export interface MetaEntry<T = string> {
   label: T;
@@ -85,7 +93,7 @@ function updateScenarioId(value: Partial<ScenarioIdType>) {
     if (key in v) {
       (v as any)[key] = value;
     } else {
-      console.warn(`Property ${key} does not exist on Holding class.`);
+      console.warn(`Property ${key} does not exist on ScenarioIdType class.`);
     }
   });
   const postSnapshot = xmlToString(msdl.value.scenarioId.element);
@@ -164,12 +172,93 @@ function updateItemLocation(objectHandle: string, newLocation: Position) {
   // console.warn("Not implemented yet: updateItemLocation", newLocation);
 }
 
+function updateHoldings(objectHandle: string, newHoldings: HoldingType[]) {
+  if (!msdl.value) return;
+  const item = msdl.value.getUnitById(objectHandle) ?? msdl.value.getEquipmentById(objectHandle);
+  if (!item) {
+    console.warn(`Unit/EquipmentItem with object handle ${objectHandle} not found.`);
+    return;
+  }
+  // TODO: implement a smarter merge between existing item.holdings and newHoldings
+  const holdingObjects = newHoldings.map((h) => {
+    const newHolding = Holding.fromModel(h);
+    newHolding.updateFromObject(h);
+    return newHolding;
+  });
+
+  // TODO: undo/redo functionality
+  // const preSnapshot = xmlToString(item.element);
+  item.holdings = holdingObjects;
+  // const postSnapshot = xmlToString(item.element);
+  // const inversePatches: Patch[] = [
+  //   {
+  //     op: "replace",
+  //     path: ["PATH_TO_UNIT"],
+  //     value: preSnapshot,
+  //   },
+  // ];
+  // const patches: Patch[] = [
+  //   {
+  //     op: "replace",
+  //     path: ["PATH_TO_UNIT"],
+  //     value: postSnapshot,
+  //   },
+  // ];
+  // undoStack.value.push({ patches, inversePatches });
+  // redoStack.value.splice(0);
+  triggerRef(msdl);
+}
+
+function setPrimarySide(objectHandleOrSide: string | ForceSide) {
+  if (!msdl.value) return;
+  const objectHandle =
+    typeof objectHandleOrSide === "string" ? objectHandleOrSide : objectHandleOrSide.objectHandle;
+  const forceSide = msdl.value.getForceSideById(objectHandle);
+  if (!forceSide) {
+    console.warn(`Force side with object handle ${objectHandle} not found.`);
+    return;
+  }
+  msdl.value.primarySide = forceSide;
+  const scenarioKey = createScenarioKey(msdl.value);
+
+  triggerRef(msdl);
+}
+
+function setSideAffiliation(objectHandleOrSide: string | ForceSide, affiliation: StandardIdentity) {
+  if (!msdl.value) return;
+  const objectHandle =
+    typeof objectHandleOrSide === "string" ? objectHandleOrSide : objectHandleOrSide.objectHandle;
+  const forceSide = msdl.value.getForceSideById(objectHandle);
+  if (!forceSide) {
+    console.warn(`Force side with object handle ${objectHandle} not found.`);
+    return;
+  }
+  forceSide.setAffiliation(affiliation);
+  triggerRef(msdl);
+}
+
+function createScenarioKey(scenario: MilitaryScenario): string {
+  return scenario.scenarioId.name + scenario.scenarioId.description;
+}
+
 export function useScenarioStore() {
   const layerStore = useLayerStore();
   const selectStore = useSelectStore();
+  const sideStore = useSideStore();
 
   function loadScenario(scenario: MilitaryScenario) {
     selectStore.clearActiveItem();
+    const scenarioKey = createScenarioKey(scenario);
+    if (scenarioKey in sideStore.primarySideMap) {
+      const primarySide = scenario.getForceSideById(sideStore.primarySideMap[scenarioKey]);
+      if (!primarySide) {
+        console.warn(
+          `Primary side with object handle ${sideStore.primarySideMap[scenarioKey]} not found.`,
+        );
+      } else {
+        scenario.primarySide = primarySide;
+      }
+    }
     msdl.value = scenario;
     layerStore.setSideLayers(scenario);
     undoStack.value = [];
@@ -196,7 +285,19 @@ export function useScenarioStore() {
     redo,
     canUndo,
     canRedo,
-    modifyScenario: { updateScenarioId, updateForceSide, updateItemLocation },
+    modifyScenario: {
+      updateScenarioId,
+      updateForceSide,
+      updateItemLocation,
+      updateHoldings,
+      setPrimarySide: (side: ForceSide | string) => {
+        setPrimarySide(side);
+        const scenarioKey = createScenarioKey(msdl.value!);
+        const primarySideKey = typeof side === "string" ? side : side.objectHandle;
+        sideStore.primarySideMap[scenarioKey] = primarySideKey;
+      },
+      setSideAffiliation,
+    },
     isNETN,
   };
 }

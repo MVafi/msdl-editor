@@ -15,7 +15,7 @@ import { ChevronDown, ExternalLinkIcon } from "lucide-vue-next";
 import { useDialogStore } from "@/stores/dialogStore.ts";
 
 import { useLayerStore, useMapSettingsStore } from "@/stores/layerStore.ts";
-import { useScenarioStore } from "@/stores/scanarioStore.ts";
+import { useScenarioStore } from "@/stores/scenarioStore.ts";
 import { useScenarioActions } from "@/composables/scenarioActions.ts";
 
 const store = useLayerStore();

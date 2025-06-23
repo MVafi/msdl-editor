@@ -1,5 +1,5 @@
 import { downloadAsKMZ, downloadAsMSDL, loadMSDLFromFile } from "@/lib/io.ts";
-import { useScenarioStore } from "@/stores/scanarioStore.ts";
+import { useScenarioStore } from "@/stores/scenarioStore.ts";
 import { toast } from "vue-sonner";
 import { useDialogStore } from "@/stores/dialogStore.ts";
 export type ScenarioAction =
