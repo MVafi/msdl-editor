@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useScenarioStore } from "@/stores/scanarioStore.ts";
+import { useScenarioStore } from "@/stores/scenarioStore.ts";
 import { Button } from "@/components/ui/button";
 import { useDialogStore } from "@/stores/dialogStore.ts";
 import PanelDataGrid from "@/components/PanelDataGrid.vue";

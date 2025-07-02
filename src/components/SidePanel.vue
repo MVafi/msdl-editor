@@ -14,7 +14,7 @@ import OrbatTree from "@/components/OrbatTree.vue";
 import { computed } from "vue";
 import { sortBy } from "@/utils.ts";
 import { Button } from "@/components/ui/button";
-import { useScenarioStore } from "@/stores/scanarioStore.ts";
+import { useScenarioStore } from "@/stores/scenarioStore.ts";
 import SidePanelDropdown from "@/components/SidePanelDropdown.vue";
 import { useSideStore } from "@/stores/uiStore.ts";
 import { useSelectStore } from "@/stores/selectStore.ts";

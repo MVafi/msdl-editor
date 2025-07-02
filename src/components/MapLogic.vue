@@ -6,7 +6,7 @@ import { computed, onUnmounted, ref, watch, watchEffect } from "vue";
 import { combineSidesToJson, sortBy } from "@/utils.ts";
 import { useLayerStore, useMapSettingsStore } from "@/stores/layerStore.ts";
 import { useSelectStore } from "@/stores/selectStore.ts";
-import { useScenarioStore } from "@/stores/scanarioStore.ts";
+import { useScenarioStore } from "@/stores/scenarioStore.ts";
 import MapContextMenu from "@/components/MapContextMenu.vue";
 import type { MapContextMenuEvent } from "@/components/types.ts";
 import { useUIStore } from "@/stores/uiStore.ts";

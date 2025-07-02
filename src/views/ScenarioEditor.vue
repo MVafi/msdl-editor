@@ -11,7 +11,7 @@ import LeftPanel from "@/components/LeftPanel.vue";
 import RightPanel from "@/components/RightPanel.vue";
 import { useFileDropZone } from "@/composables/filedragdrop.ts";
 import DropZoneIndicator from "@/components/DropZoneIndicator.vue";
-import { useScenarioStore } from "@/stores/scanarioStore.ts";
+import { useScenarioStore } from "@/stores/scenarioStore.ts";
 import { progress } from "@/composables/progress.ts";
 import { GlobalEvents } from "vue-global-events";
 import { inputEventFilter } from "@/utils.ts";
