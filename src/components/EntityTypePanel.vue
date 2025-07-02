@@ -153,7 +153,7 @@ const uniqueEntityTypeFields = computed(() => {
       }
       return acc;
     },
-    [] as { label: string; value: string; }[],
+    [] as { label: string; value: string }[],
   );
 }); 
 
