@@ -45,7 +45,7 @@ const entityTypeFields = computed(() => {
     { label: "Kind", value: sisoEnums.value.getKindName(sisoEntityType.value) },
     { label: "Domain", value: sisoEnums.value.getDomainName(sisoEntityType.value) },
     { label: "Country", value: sisoEnums.value.getCountryName(sisoEntityType.value) },
-    { label: "Category", value: sisoEnums.value.getCategoryName(sisoEntityType.value)},
+    { label: "Category", value: sisoEnums.value.getCategoryName(sisoEntityType.value) },
     { label: "Subcategory", value: sisoEnums.value.getSubcategoryName(sisoEntityType.value) },
     { label: "Specific", value: sisoEnums.value.getSpecificName(sisoEntityType.value) },
     { label: "Extra", value: sisoEnums.value.getExtraName(sisoEntityType.value) },
