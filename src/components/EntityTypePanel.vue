@@ -200,7 +200,7 @@ const setLocalVariables = (entType: string) => {
             Edit
           </Button>
         </DialogTrigger>
-        <DialogContent class="sm:max-w-[425px]">
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Edit profile</DialogTitle>
             <DialogDescription>

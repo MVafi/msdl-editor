@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { Combobox, ComboboxAnchor, ComboboxEmpty, ComboboxGroup, ComboboxInput, ComboboxItem, ComboboxItemIndicator, ComboboxList } from '@/components/ui/combobox'
 import { useEntityTypeStore } from "@/stores/entityTypeStore";
 import { storeToRefs } from "pinia";
-import { watch, ref, computed } from "vue";
+import { watch, ref } from "vue";
 import { ScrollArea } from '@/components/ui/scroll-area'
 
 // Get props from parent
@@ -56,7 +56,7 @@ const handleClick = async () => {
       </div>
     </ComboboxAnchor>
 
-    <ComboboxList class="w-100" style="background-color: red;">
+    <ComboboxList class="w-100">
 
       <ScrollArea class="h-100">
         <ComboboxEmpty>
