@@ -1,15 +1,19 @@
 <script setup lang="ts">
 import type { EquipmentItem } from "@orbat-mapper/msdllib";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import EntityTypePanel from "@/components/EntityTypePanel.vue";
 
 const props = defineProps<{
   equipment: EquipmentItem;
 }>();
 
-const emit = defineEmits<{
-  (e: "update:equipment", value: EquipmentItem): void;
-}>();
+// Re-render component when the equipmentModel is updated
+const componentKey = ref(0);
+const triggerRerender = () => { 
+  componentKey.value += 1;
+  emit('rerenderXML');
+}
+const emit = defineEmits(['rerenderXML']);
 
 const equipmentModel = computed(() => props.equipment?.model ?? null);
 </script>
@@ -19,7 +23,8 @@ const equipmentModel = computed(() => props.equipment?.model ?? null);
     <EntityTypePanel
       v-if="equipmentModel?.entityType"
       v-model="equipmentModel.entityType"
-      @update:model-value="emit('update:equipment', equipment)"
+      @update:modelValue="triggerRerender"
+      :key="componentKey" 
     >
     </EntityTypePanel>
     <span v-else>No entitytype provided</span>
