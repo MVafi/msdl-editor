@@ -11,15 +11,15 @@ const props = defineProps<{
 const componentKey = ref(0);
 const triggerRerender = () => {
   componentKey.value += 1;
-  emit("rerenderXML");
+  emit("rerenderXMLpreview");
 };
-const emit = defineEmits(["rerenderXML"]);
+const emit = defineEmits(["rerenderXMLpreview"]);
 
 const equipmentModel = computed(() => props.equipment?.model ?? null);
 </script>
 <template>
   <div v-if="equipmentModel">
-    <h4 class="text-sm font-bold mt-2">EquipmentItem Model</h4>
+    <h4 class="text-sm font-bold">Equipment Item Model</h4>
     <EntityTypePanel
       v-if="equipmentModel?.entityType"
       v-model="equipmentModel.entityType"
