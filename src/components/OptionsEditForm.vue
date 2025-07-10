@@ -1,13 +1,24 @@
 <script setup lang="ts">
-import { FormControl, FormField, FormItem, FormLabel, FormMessage, } from "@/components/ui/form";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as z from "zod";
 import { useForm } from "vee-validate";
 import { Input } from "@/components/ui/input";
 import FormFooter from "@/components/FormFooter.vue";
 import type { MsdlOptionsType, MsdlOptions } from "@orbat-mapper/msdllib/dist/lib/msdlOptions";
-import { EnumEchelon, SymbologyStandard, CoordinateSystem } from "@orbat-mapper/msdllib/dist/lib/enums";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue, } from '@/components/ui/select'
+import {
+  EnumEchelon,
+  SymbologyStandard,
+  CoordinateSystem,
+} from "@orbat-mapper/msdllib/dist/lib/enums";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
 type FormVariant = "new" | "edit";
@@ -37,7 +48,7 @@ const form = useForm({
   validationSchema: formSchema,
   initialValues: {
     MSDLVersion: props.item.MSDLVersion || "",
-    AggregateBased: props.item.AggregateBased || "", 
+    AggregateBased: props.item.AggregateBased || "",
     AggregateEchelon: props.item.AggregateEchelon || "",
     StandardName: props.item.StandardName || "",
     MajorVersion: props.item.MajorVersion || "",
@@ -54,24 +65,28 @@ const onSubmit = form.handleSubmit((values) => {
 // Dropdown options obtained from the msdllib package
 const echelonOptions = Object.entries(EnumEchelon).map(([key, value]) => ({
   label: key,
-  value: value
+  value: value,
 }));
 
 const standardNameOptions = Object.entries(SymbologyStandard).map(([key, value]) => ({
   label: key,
-  value: value
+  value: value,
 }));
 
 const coordinateSystemTypeOptions = Object.entries(CoordinateSystem).map(([key, value]) => ({
   label: key,
-  value: value
+  value: value,
 }));
 </script>
 
 <template>
   <div>
     <form @submit.prevent="onSubmit" class="flex flex-col gap-6 mt-6">
-      <FormField v-slot="{ componentField }" name="MSDLVersion" :validate-on-blur="!form.isFieldDirty">
+      <FormField
+        v-slot="{ componentField }"
+        name="MSDLVersion"
+        :validate-on-blur="!form.isFieldDirty"
+      >
         <FormItem>
           <FormLabel>MSDLVersion</FormLabel>
           <FormControl>
@@ -95,7 +110,7 @@ const coordinateSystemTypeOptions = Object.entries(CoordinateSystem).map(([key, 
                   <SelectValue placeholder="n/a" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>        
+              <SelectContent>
                 <SelectGroup>
                   <SelectItem
                     v-for="option in standardNameOptions"
@@ -107,7 +122,9 @@ const coordinateSystemTypeOptions = Object.entries(CoordinateSystem).map(([key, 
                 </SelectGroup>
               </SelectContent>
             </Select>
-            <Button variant="outline" class="ml-4" @click.prevent="componentField.onChange('')">Clear</Button>
+            <Button variant="outline" class="ml-4" @click.prevent="componentField.onChange('')"
+              >Clear</Button
+            >
           </div>
           <FormMessage />
         </FormItem>
@@ -126,7 +143,6 @@ const coordinateSystemTypeOptions = Object.entries(CoordinateSystem).map(([key, 
           <FormMessage />
         </FormItem>
       </FormField>
-
 
       <FormField
         v-slot="{ componentField }"
@@ -156,7 +172,7 @@ const coordinateSystemTypeOptions = Object.entries(CoordinateSystem).map(([key, 
                   <SelectValue placeholder="n/a" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>        
+              <SelectContent>
                 <SelectGroup>
                   <SelectItem
                     v-for="option in coordinateSystemTypeOptions"
@@ -168,12 +184,13 @@ const coordinateSystemTypeOptions = Object.entries(CoordinateSystem).map(([key, 
                 </SelectGroup>
               </SelectContent>
             </Select>
-            <Button variant="outline" class="ml-4" @click.prevent="componentField.onChange('')">Clear</Button>
+            <Button variant="outline" class="ml-4" @click.prevent="componentField.onChange('')"
+              >Clear</Button
+            >
           </div>
           <FormMessage />
         </FormItem>
       </FormField>
-
 
       <FormField
         v-slot="{ componentField }"
@@ -216,7 +233,7 @@ const coordinateSystemTypeOptions = Object.entries(CoordinateSystem).map(([key, 
                   <SelectValue placeholder="n/a" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>        
+              <SelectContent>
                 <SelectGroup>
                   <SelectItem
                     v-for="option in echelonOptions"
@@ -228,7 +245,9 @@ const coordinateSystemTypeOptions = Object.entries(CoordinateSystem).map(([key, 
                 </SelectGroup>
               </SelectContent>
             </Select>
-            <Button variant="outline" class="ml-4" @click.prevent="componentField.onChange('')">Clear</Button>
+            <Button variant="outline" class="ml-4" @click.prevent="componentField.onChange('')"
+              >Clear</Button
+            >
           </div>
           <FormMessage />
         </FormItem>

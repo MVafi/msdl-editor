@@ -221,7 +221,9 @@ const setLocalVariables = (entType: string) => {
 <template>
   <div v-if="sisoEntityType">
     <h4 class="text-sm font-bold mt-2 flex items-center justify-between">
-      <span class="text-muted-foreground font-medium">Entity type: {{ entityType || "Unknown" }}</span>
+      <span class="text-muted-foreground font-medium"
+        >Entity type: {{ entityType || "Unknown" }}</span
+      >
 
       <Dialog :modal="false">
         <DialogTrigger as-child>
