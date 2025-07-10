@@ -136,36 +136,6 @@ function checkIfSymbolCode(id: string) {
   return /^[A-Z0-9\-*]+$/.test(id);
 }
 
-function highlightSymbol(map : MlMap, target_sidc : string, features: {properties:{sidc? : string}}[]){
-  
-  features.forEach(feature => {
-
-    const sidc = feature.properties?.sidc || ''
-    const outlineColor = sidc === target_sidc ? "red" : "white";
-
-    // Remove the current symbol
-    map.removeImage(sidc);
-
-    // Recreate the symbol with outline
-    const symb = new ms.Symbol(sidc, {
-      size: store.symbolSize ?? 20,
-      outlineWidth: store.showSymbolOutline ? 7 : 0,
-      outlineColor: outlineColor
-    });
-
-    const { width, height } = symb.getSize();
-    const data = symb
-      .asCanvas(2)
-      ?.getContext("2d")
-      ?.getImageData(0, 0, 2 * width, 2 * height);
-
-    // Add the new symbol
-    if (data) {
-      map.addImage(sidc, data, { pixelRatio: 2 });
-    }
-  });
-}
-
 function addSidesToMap(map: MlMap) {
   const featureCollection = combineSidesToJson(sides.value, {
     includeUnits: store.showUnits,
@@ -219,10 +189,6 @@ function addSidesToMap(map: MlMap) {
     const activeItemId = e.features[0].properties.id as string;
     if (!activeItemId) return;
     selectStore.activeItem = msdl.value?.getUnitOrEquipmentById(activeItemId) ?? null;
-
-    const features : {properties:{sidc? : string}}[] = featureCollection.features
-    const target_sidc = selectStore.activeItem?.sidc || ''
-    highlightSymbol(map, target_sidc, features)
   });
 
   // Change the cursor to a pointer when the mouse is over the places layer.
