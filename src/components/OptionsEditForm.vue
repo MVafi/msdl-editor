@@ -47,14 +47,14 @@ const formSchema = toTypedSchema(
 const form = useForm({
   validationSchema: formSchema,
   initialValues: {
-    MSDLVersion: props.item.MSDLVersion || "",
-    AggregateBased: props.item.AggregateBased || "",
-    AggregateEchelon: props.item.AggregateEchelon || "",
-    StandardName: props.item.StandardName || "",
-    MajorVersion: props.item.MajorVersion || "",
-    MinorVersion: props.item.MinorVersion || "",
-    CoordinateSystemType: props.item.CoordinateSystemType || "",
-    CoordinateSystemDatum: props.item.CoordinateSystemDatum || "",
+    msdlVersion: props.item.msdlVersion || "",
+    aggregateBased: props.item.aggregateBased || "",
+    aggregateEchelon: props.item.aggregateEchelon || "",
+    standardName: props.item.standardName || "",
+    majorVersion: props.item.majorVersion || "",
+    minorVersion: props.item.minorVersion || "",
+    coordinateSystemType: props.item.coordinateSystemType || "",
+    coordinateSystemDatum: props.item.coordinateSystemDatum || "",
   },
 });
 
@@ -84,7 +84,7 @@ const coordinateSystemTypeOptions = Object.entries(CoordinateSystem).map(([key, 
     <form @submit.prevent="onSubmit" class="flex flex-col gap-6 mt-6">
       <FormField
         v-slot="{ componentField }"
-        name="MSDLVersion"
+        name="msdlVersion"
         :validate-on-blur="!form.isFieldDirty"
       >
         <FormItem>
@@ -98,7 +98,7 @@ const coordinateSystemTypeOptions = Object.entries(CoordinateSystem).map(([key, 
 
       <FormField
         v-slot="{ componentField }"
-        name="StandardName"
+        name="standardName"
         :validate-on-blur="!form.isFieldDirty"
       >
         <FormItem>
@@ -132,7 +132,7 @@ const coordinateSystemTypeOptions = Object.entries(CoordinateSystem).map(([key, 
 
       <FormField
         v-slot="{ componentField }"
-        name="MajorVersion"
+        name="majorVersion"
         :validate-on-blur="!form.isFieldDirty"
       >
         <FormItem>
@@ -146,7 +146,7 @@ const coordinateSystemTypeOptions = Object.entries(CoordinateSystem).map(([key, 
 
       <FormField
         v-slot="{ componentField }"
-        name="MinorVersion"
+        name="minorVersion"
         :validate-on-blur="!form.isFieldDirty"
       >
         <FormItem>
@@ -160,7 +160,7 @@ const coordinateSystemTypeOptions = Object.entries(CoordinateSystem).map(([key, 
 
       <FormField
         v-slot="{ componentField }"
-        name="CoordinateSystemType"
+        name="coordinateSystemType"
         :validate-on-blur="!form.isFieldDirty"
       >
         <FormItem>
@@ -194,7 +194,7 @@ const coordinateSystemTypeOptions = Object.entries(CoordinateSystem).map(([key, 
 
       <FormField
         v-slot="{ componentField }"
-        name="CoordinateSystemDatum"
+        name="coordinateSystemDatum"
         :validate-on-blur="!form.isFieldDirty"
       >
         <FormItem>
@@ -208,7 +208,7 @@ const coordinateSystemTypeOptions = Object.entries(CoordinateSystem).map(([key, 
 
       <FormField
         v-slot="{ componentField }"
-        name="AggregateBased"
+        name="aggregateBased"
         :validate-on-blur="!form.isFieldDirty"
       >
         <FormItem>
@@ -221,7 +221,7 @@ const coordinateSystemTypeOptions = Object.entries(CoordinateSystem).map(([key, 
       </FormField>
       <FormField
         v-slot="{ componentField }"
-        name="AggregateEchelon"
+        name="aggregateEchelon"
         :validate-on-blur="!form.isFieldDirty"
       >
         <FormItem>

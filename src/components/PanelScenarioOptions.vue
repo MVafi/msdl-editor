@@ -52,29 +52,29 @@ function onUpdate(data: Partial<MsdlOptionsType>) {
       @update="onUpdate"
     />
     <DescriptionList v-else class="divide-y divide-border">
-      <DescriptionItem label="MSDLVersion">{{
-        msdl.msdlOptions.MSDLVersion || "n/a"
+      <DescriptionItem label="msdlVersion">{{
+        msdl.msdlOptions.msdlVersion || "n/a"
       }}</DescriptionItem>
-      <DescriptionItem label="StandardName">{{
-        msdl.msdlOptions.StandardName || "n/a"
+      <DescriptionItem label="standardName">{{
+        msdl.msdlOptions.standardName || "n/a"
       }}</DescriptionItem>
-      <DescriptionItem label="MajorVersion">{{
-        msdl.msdlOptions.MajorVersion || "n/a"
+      <DescriptionItem label="majorVersion">{{
+        msdl.msdlOptions.majorVersion || "n/a"
       }}</DescriptionItem>
-      <DescriptionItem label="MinorVersion">{{
-        msdl.msdlOptions.MinorVersion || "n/a"
+      <DescriptionItem label="minorVersion">{{
+        msdl.msdlOptions.minorVersion || "n/a"
       }}</DescriptionItem>
-      <DescriptionItem label="CoordinateSystemType">{{
-        msdl.msdlOptions.CoordinateSystemType || "n/a"
+      <DescriptionItem label="coordinateSystemType">{{
+        msdl.msdlOptions.coordinateSystemType || "n/a"
       }}</DescriptionItem>
-      <DescriptionItem label="CoordinateSystemDatum">{{
-        msdl.msdlOptions.CoordinateSystemDatum || "n/a"
+      <DescriptionItem label="coordinateSystemDatum">{{
+        msdl.msdlOptions.coordinateSystemDatum || "n/a"
       }}</DescriptionItem>
-      <DescriptionItem label="AggregateBased">{{
-        msdl.msdlOptions.AggregateBased || "n/a"
+      <DescriptionItem label="aggregateBased">{{
+        msdl.msdlOptions.aggregateBased || "n/a"
       }}</DescriptionItem>
-      <DescriptionItem label="AggregateEchelon">{{
-        msdl.msdlOptions.AggregateEchelon || "n/a"
+      <DescriptionItem label="aggregateEchelon">{{
+        msdl.msdlOptions.aggregateEchelon || "n/a"
       }}</DescriptionItem>
       <div class="flex items-center justify-end mt-4">
         <Button variant="outline" type="button" size="sm" @click="toggleEditForm()"
