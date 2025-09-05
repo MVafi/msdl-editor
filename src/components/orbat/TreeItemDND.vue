@@ -29,6 +29,7 @@ import {
 import type { OrbatTreeItem } from "@/components/orbat/types.ts";
 import { Badge } from "@/components/ui/badge";
 import type { Federate } from "@orbat-mapper/msdllib";
+import { useLayerStore } from "@/stores/layerStore.ts";
 
 const props = defineProps<{
   item: FlattenedItem<OrbatTreeItem>;
@@ -44,8 +45,8 @@ const instruction = ref<Extract<
 > | null>(null);
 
 const { msdl } = useScenarioStore();
-
 const selectStore = useSelectStore();
+const layerStore = useLayerStore();
 
 const mode = computed(() => {
   if (props.item.hasChildren) return "expanded";
@@ -206,9 +207,15 @@ function onSelect(item: any) {
 function openFederateDetail() {
   selectStore.activeFederate = federate.value;
 }
+
+const federateVisible = computed(() => {
+  return federate.value.name && layerStore.shownFederates.has(federate.value.name) ? true : false
+});
+
 </script>
 <template>
   <TreeItem
+    v-if="federateVisible"
     ref="elRef"
     :id="`oi-${item._id}`"
     v-slot="{ isExpanded, handleToggle }"

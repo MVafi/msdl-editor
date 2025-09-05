@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import type { MilitaryScenario } from "@orbat-mapper/msdllib";
 import { useLocalStorage } from "@vueuse/core";
+import { UNALLOCATED_FEDERATE } from "@/stores/selectStore.ts";
 
 export const useLayerStore = defineStore("visibleLayers", () => {
   const layers = ref<Set<string>>(new Set());
@@ -12,11 +13,21 @@ export const useLayerStore = defineStore("visibleLayers", () => {
   const showSymbolOutline = useLocalStorage("showSymbolOutline", true);
   const symbolSize = useLocalStorage("symbolSize", 20);
   const showAreaOfInterest = useLocalStorage("showAreaOfInterest", true);
+  const shownFederates = ref<Set<string>>(new Set());
 
   function setSideLayers(scenario: MilitaryScenario) {
     layers.value.clear();
     scenario.sides.forEach((layer) => {
       layers.value.add(layer.objectHandle);
+    });
+  }
+
+  function setShownFederates(scenario: MilitaryScenario){
+    shownFederates.value.clear();
+    let federates = (scenario.deployment?.federates || []).concat(UNALLOCATED_FEDERATE)
+
+    federates.forEach((federate) => {
+      if (federate.name) shownFederates.value.add(federate.name)
     });
   }
 
@@ -30,6 +41,8 @@ export const useLayerStore = defineStore("visibleLayers", () => {
     showSymbolOutline,
     symbolSize,
     showAreaOfInterest,
+    shownFederates,
+    setShownFederates,
   };
 });
 

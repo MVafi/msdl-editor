@@ -396,6 +396,7 @@ function addFederate(newFederate?: Partial<FederateType>) {
   const fed = Federate.create();
   fed.updateFromObject(newFederate);
   msdl.value.addFederate(fed);
+  if (newFederate.name) useLayerStore().shownFederates.add(newFederate.name)
   triggerRef(msdl);
 }
 
@@ -510,6 +511,7 @@ export function useScenarioStore() {
     }
     msdl.value = scenario;
     layerStore.setSideLayers(scenario);
+    layerStore.setShownFederates(scenario);
     undoStack.value = [];
     redoStack.value = [];
   }

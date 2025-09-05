@@ -17,6 +17,10 @@ import SideItem from "@/components/orbat/SideItem.vue";
 import { useExpandedStore } from "@/stores/expandedStore.ts";
 import { useSelectStore } from "@/stores/selectStore";
 import DescriptionItem from "@/components/DescriptionItem.vue";
+import { Checkbox } from "@/components/ui/checkbox"
+import { UNALLOCATED_FEDERATE } from "@/stores/selectStore.ts";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+import { Badge } from "@/components/ui/badge";
 
 const {
   msdl,
@@ -75,6 +79,24 @@ function toggleLayers() {
   });
 }
 
+const allFederates = computed(() => {
+  return (msdl.value?.deployment?.federates || []).concat(UNALLOCATED_FEDERATE);
+});
+
+function isFederateShown(id : string){
+  if (layerStore.shownFederates.has(id)) return true
+  return false
+}
+
+function toggleShownFederates(id : string, value : boolean |  'indeterminate') {
+  if (value === 'indeterminate') return
+  if (value){
+    layerStore.shownFederates.add(id)
+  } else {
+    layerStore.shownFederates.delete(id)
+  }
+};
+
 function openFederatesPanel() {
   selectStore.openFederatesPanel();
 }
@@ -87,19 +109,41 @@ function showAssociations() {
   dialogStore.toggleAssociationDialog();
 }
 </script>
-
 <template>
-  <header class="flex items-center justify-between px-4 mt-1">
-    <h3 class="text-xs/6 font-semibold uppercase">
-      Sides<span v-if="hasHiddenSides" class="ml-2 text-muted-foreground text-xs"
-        >({{ sides.length }}/{{ msdl?.sides.length }})</span
-      >
-    </h3>
-    <SidePanelDropdown
-      @toggleVisibility="toggleLayers"
-      @createForceSide="createForceSide"
-      @showAssociations="showAssociations"
-    />
+  <header v-if="msdl" class="px-4 mt-1">
+
+    <div class="flex items-center justify-between">
+      <h3 class="text-xs/6 font-semibold uppercase">
+        Sides<span v-if="hasHiddenSides" class="ml-2 text-muted-foreground text-xs"
+          >({{ sides.length }}/{{ msdl?.sides.length }})</span
+        >
+      </h3>
+      <SidePanelDropdown
+        @toggleVisibility="toggleLayers"
+        @createForceSide="createForceSide"
+        @showAssociations="showAssociations"
+      />
+    </div>
+
+    
+    <ScrollArea class="pb-3">
+      <div class="flex space-x-2">
+        <div v-for="federate in allFederates" :key="federate.name">
+          <div class="flex items-center space-x-2 pr-2">
+              <Checkbox :model-value="isFederateShown(federate.name || '')" @update:model-value="(value : boolean |  'indeterminate') => toggleShownFederates(federate.name || '', value)"/>
+              <label
+                for="terms"
+                class="text-xs/6 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 whitespace-nowrap"
+              >
+              <Badge variant="secondary" class="text-muted-foreground">{{ federate.name }}</Badge>
+              </label>
+          </div>
+        </div>
+      </div>
+      <ScrollBar orientation="horizontal" />
+    </ScrollArea>
+
+
   </header>
   <CreateNewForceSideDialog
     v-model:open="dialogStore.isCreateForceSideDialogOpen"
