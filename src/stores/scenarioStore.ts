@@ -353,6 +353,7 @@ function addUnit(
   });
   item.name = newUnit?.name ?? "New unit";
   item.sidc = "SFGPU----------";
+  item.symbolIdentifier = item.sidc;
   if (msdl.value.primarySide) item.setForceRelation(msdl.value.primarySide);
   msdl.value.addUnit(item);
   triggerRef(msdl);
@@ -369,6 +370,7 @@ function addEquipmentItem(
   });
   item.name = newEquipment?.name ?? "New equipment item";
   item.sidc = "SFGPE-----M----";
+  item.symbolIdentifier = item.sidc;
   msdl.value.addEquipmentItem(item);
   triggerRef(msdl);
 }
